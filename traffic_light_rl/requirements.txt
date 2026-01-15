@@ -1,0 +1,12 @@
+# Core dependencies
+numpy>=1.21.0
+gymnasium>=0.29.0    # Modern replacement for gym
+
+# Deep learning (for DQN)
+torch>=2.0.0
+
+# Visualization
+matplotlib>=3.4.0
+
+# Configuration
+pyyaml>=5.4.0
