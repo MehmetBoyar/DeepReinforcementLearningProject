@@ -22,6 +22,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 import sys
 import numpy as np
 import time
+import yaml 
 
 # =============================================================================
 # CONFIGURATION - Modify these settings
@@ -91,7 +92,33 @@ print("\n" + "-"*70)
 print("ENVIRONMENT SETUP")
 print("-"*70)
 
-env = TrafficLightEnv(seed=SEED)
+# 1. Load the Configuration File
+# We need to load this to get the base arrival rates
+config_path = os.path.join(os.path.dirname(__file__), 'config', 'config.yaml')
+try:
+    with open(config_path, 'r') as f:
+        config = yaml.safe_load(f)
+    print(f"Loaded config from: {config_path}")
+except FileNotFoundError:
+    print(f"ERROR: Config file not found at {config_path}")
+    # Fallback to defaults if file is missing (prevents crash, but warns user)
+    config = {'environment': {'arrival_rates': {
+        'N_to_S': 0.15, 'N_to_E': 0.05, 'N_to_W': 0.05,
+        'S_to_N': 0.15, 'S_to_W': 0.05, 'S_to_E': 0.05,
+        'E_to_W': 0.15, 'E_to_S': 0.05, 'E_to_N': 0.05,
+        'W_to_E': 0.15, 'W_to_N': 0.05, 'W_to_S': 0.05
+    }}}
+
+# 2. Increase Traffic Difficulty for Training
+# We multiply rates by 1.3 to train on a harder scenario than the evaluation
+base_rates = config['environment']['arrival_rates']
+harder_rates = {k: v * 1.3 for k, v in base_rates.items()} 
+
+print("Training Difficulty: 1.3x Traffic Rates")
+
+# 3. Initialize Environment with Harder Rates
+# CRITICAL FIX: We are passing 'arrival_rates=harder_rates' here!
+env = TrafficLightEnv(seed=SEED, arrival_rates=harder_rates)
 
 print(f"State space: {env.observation_space.shape[0]} dimensions")
 print(f"  - 12 queue lengths (vehicles waiting per movement)")
@@ -135,7 +162,7 @@ if TRAIN_QLEARNING:
         gamma=0.95,          # Discount factor
         epsilon=1.0,         # Initial exploration rate
         epsilon_min=0.05,    # Slightly higher min for more exploration
-        epsilon_decay=0.997, # Slower decay for more exploration
+        epsilon_decay=0.995, # Slower decay for more exploration
         queue_bins=[0, 5, 15, np.inf],      # Coarser bins (3 levels) for better coverage
         duration_bins=[0, 20, 60, np.inf]   # Coarser bins (3 levels)
     )
@@ -646,7 +673,32 @@ if trained_agents:
     
     print(f"\nDemo finished! Reward: {total_reward:.2f}, "
           f"Vehicles passed: {info['total_vehicles_passed']}")
+    
+# =============================================================================
+# Save Trained Models (
+# =============================================================================
 
+print("\n" + "-"*70)
+print("SAVING MODELS")
+print("-"*70)
+
+# Create models directory if it doesn't exist
+import os
+os.makedirs('models', exist_ok=True)
+
+# Save Q-Learning Agent
+if 'Q-Learning' in trained_agents:
+    q_path = 'models/q_learning.pkl'
+    trained_agents['Q-Learning'].save(q_path)
+    print(f"Saved Q-Learning model to: {q_path}")
+
+# Save DQN Agent
+if 'DQN' in trained_agents:
+    dqn_path = 'models/dqn.pkl'
+    trained_agents['DQN'].save(dqn_path)
+    print(f"Saved DQN model to: {dqn_path}")
+
+print("-"*70)
 # =============================================================================
 # Summary
 # =============================================================================
@@ -663,3 +715,4 @@ for i, (name, res) in enumerate(ranked, 1):
 print("\n" + "="*70)
 print("TRAINING COMPLETE!")
 print("="*70)
+

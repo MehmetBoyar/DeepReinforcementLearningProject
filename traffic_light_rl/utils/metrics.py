@@ -42,21 +42,25 @@ class EvaluationMetrics:
             self.phase_switches = info['phase_switches']
         
         self.total_steps += 1
-    
+
     def get_summary(self) -> Dict[str, float]:
         """Get summary statistics"""
+        passed_count = max(1, self.total_vehicles_passed)
+        avg_wait_per_vehicle = self.total_wait_time / passed_count
+        
         return {
             'total_reward': self.total_reward,
             'avg_reward': np.mean(self.rewards) if self.rewards else 0.0,
             'total_vehicles_passed': self.total_vehicles_passed,
             'total_wait_time': self.total_wait_time,
+            'avg_wait_per_vehicle': avg_wait_per_vehicle,  
             'avg_queue_length': np.mean(self.queue_lengths) if self.queue_lengths else 0.0,
             'max_queue_length': max(self.queue_lengths) if self.queue_lengths else 0.0,
             'avg_throughput': np.mean(self.throughputs) if self.throughputs else 0.0,
             'total_steps': self.total_steps,
             'phase_switches': self.phase_switches,
             'switches_per_step': self.phase_switches / max(1, self.total_steps)
-        }
+        }  
     
     def reset(self):
         """Reset all metrics"""
@@ -129,6 +133,7 @@ def evaluate_agent(env, agent, n_episodes: int = 10,
         'std_throughput': np.std(episode_throughputs),
         'mean_wait_time': np.mean(episode_wait_times),
         'std_wait_time': np.std(episode_wait_times),
+        'mean_wait_per_vehicle': np.mean([m['avg_wait_per_vehicle'] for m in all_metrics]),
         'mean_queue_length': np.mean([m['avg_queue_length'] for m in all_metrics]),
         'mean_max_queue': np.mean([m['max_queue_length'] for m in all_metrics]),
         'mean_switches': np.mean([m['phase_switches'] for m in all_metrics]),
