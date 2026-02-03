@@ -13,7 +13,7 @@ class DQNetwork(nn.Module):
         super(DQNetwork, self).__init__()
         self.dueling = dueling
 
-        # 1. Shared Feature Extractor
+        # Shared Feature Extractor
         self.feature_layer = nn.Sequential(
             nn.Linear(state_dim, hidden_dim),
             nn.ReLU(),
@@ -70,7 +70,7 @@ class DQNAgent(BaseAgent):
         self.action_dim = action_dim
         self.config = config
         
-        # --- ROBUST DEVICE DETECTION (The Fix) ---
+        # DEVICE DETECTION 
         if device == "cuda" and not torch.cuda.is_available():
             print("⚠️ Warning: Config requested CUDA but Torch not compiled with CUDA. Switching to CPU.")
             self.device = torch.device("cpu")
@@ -79,7 +79,6 @@ class DQNAgent(BaseAgent):
             self.device = torch.device("cuda")
         else:
             self.device = torch.device(device)
-        # -----------------------------------------
         
         self.is_double = getattr(config, 'double_dqn', False)
         self.is_dueling = getattr(config, 'dueling_dqn', False)

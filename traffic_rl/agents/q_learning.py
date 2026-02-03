@@ -19,7 +19,6 @@ class QLearningAgent(BaseAgent):
         # The Q-Table: Dictionary mapping state_key -> np.array([q_val_0, q_val_1, ...])
         self.Q = {} 
         
-        # --- PARITY WITH OLD CODE ---
         # Specific bins from your original config.yaml to ensure fair comparison
         # Queue Bins: [0, 1, 6, 11, 21, inf]
         self.queue_bins = [0, 1, 6, 11, 21]

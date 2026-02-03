@@ -46,15 +46,15 @@ class AdaptiveAgent(BaseAgent):
         duration = int(state[13])
         queues = state[:12] # Array of 12 queues
         
-        # 1. Respect Min Duration
+        # Respect Min Duration
         if duration < self.min_dur:
             return 0 # KEEP
             
-        # 2. Respect Max Duration
+        # Respect Max Duration
         if duration >= self.max_dur:
             return 1 # NEXT
             
-        # 3. Calculate Queue Metrics
+        # Calculate Queue Metrics
         curr_q_sum = self._get_phase_queue(queues, current_phase)
         
         next_phase = (current_phase + 1) % 4
@@ -62,20 +62,20 @@ class AdaptiveAgent(BaseAgent):
         
         total_q = curr_q_sum + next_q_sum
         
-        # 4. Standard Switch Logic
+        # Standard Switch Logic
         # If current lane is empty-ish AND waiting lane has significant traffic relative to total
         if total_q > 0:
             waiting_ratio = next_q_sum / total_q
             if curr_q_sum < self.q_thresh and waiting_ratio > self.switch_thresh:
                 return 1 # NEXT
         
-        # 5. Protected Left Turn Optimization
+        # Protected Left Turn Optimization
         # If in Left Turn Phase (1 or 3) and empty, switch immediately
         if current_phase in [1, 3]:
             if curr_q_sum < 2:
                 return 1
         
-        # 6. Skip Logic (Smart jump)
+        # Skip Logic (Smart jump)
         # If in Left Turn phase, but the cross-traffic Through lane is huge, skip to it
         ns_queue = sum(queues[0:6])
         ew_queue = sum(queues[6:12])
