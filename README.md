@@ -37,6 +37,7 @@ The project features a **Streamlit Dashboard** for GUI-based management, a **CLI
 ## 📂 Project Structure
 
     /
+    ├── Start_Dashboard.bat       # ⚡ Windows One-Click Launcher
     ├── Traffic_RL.py             # 🏠 Main Dashboard Entry Point
     ├── main.py                   # ⌨️ CLI Entry Point (Train/Batch/Optimize)
     ├── project.ipynb             # 📓 Jupyter Notebook for Manual Analysis
@@ -53,6 +54,16 @@ The project features a **Streamlit Dashboard** for GUI-based management, a **CLI
 ---
 
 ## ⚙️ Installation
+
+### Option A: ⚡ Windows Quick Start (Recommended)
+Simply double-click **`Start_Dashboard.bat`**. 
+This script will automatically:
+1. Check for Python.
+2. Create the virtual environment.
+3. Install all dependencies.
+4. Launch the Dashboard in your browser.
+
+### Option B: Manual Installation
 
 1. **Clone the repository**
 
@@ -77,8 +88,8 @@ The project features a **Streamlit Dashboard** for GUI-based management, a **CLI
 
 ## 🚀 Usage
 
-### 1. The Dashboard (Recommended)
-The easiest way to use the framework.
+### 1. The Dashboard
+To launch the GUI manually:
 
     streamlit run Traffic_RL.py
 
