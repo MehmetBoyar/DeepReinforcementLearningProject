@@ -58,27 +58,27 @@ def main():
     parser = argparse.ArgumentParser(description="Traffic RL Research Framework")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # 1. TRAIN Command (Single)
+    # TRAIN Command 
     p_train = subparsers.add_parser("train", help="Train a single agent")
     p_train.add_argument("--config", type=str, default="configs/default.yaml", help="Path to YAML config")
     p_train.add_argument("--seed", type=int, default=None, help="Override random seed")
 
-    # 2. BATCH Command (The 9-Experiment Loop)
+    # 2. BATCH Command 
     p_batch = subparsers.add_parser("batch", help="Run the 9-experiment scientific suite")
     p_batch.add_argument("--config", default="configs/default.yaml", help="Base config to use")
     p_batch.add_argument("--out", default="experiments_batch", help="Output folder name")
 
-    # 3. OPTIMIZE Command (Optuna)
+    # OPTIMIZE Command 
     p_opt = subparsers.add_parser("optimize", help="Run Hyperparameter Tuning")
     p_opt.add_argument("--trials", type=int, default=25, help="Number of trials")
     p_opt.add_argument("--config", default="configs/default.yaml", help="Base config")
 
-    # 4. ANALYZE Command (Leaderboard/Heatmap)
+    # ANALYZE Command 
     p_an = subparsers.add_parser("analyze", help="Generate tables and plots for a result folder")
     p_an.add_argument("--dir", required=True, help="Folder containing experiment results")
     p_an.add_argument("--config", default="configs/default.yaml", help="Config for env setup")
 
-    # 5. COMPARE Command (Old vs New)
+    # COMPARE Command 
     p_comp = subparsers.add_parser("compare", help="Compare two experiment folders side-by-side")
     p_comp.add_argument("--old", required=True, help="Baseline/Old Folder")
     p_comp.add_argument("--new", required=True, help="Optimized/New Folder")

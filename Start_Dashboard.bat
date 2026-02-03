@@ -6,11 +6,11 @@ CLS
 CD /D "%~dp0"
 
 ECHO ========================================================
-ECHO       🚦 TRAFFIC RL RESEARCH DASHBOARD
+ECHO      TRAFFIC RL RESEARCH DASHBOARD
 ECHO ========================================================
 ECHO.
 
-:: 1. Check if Python is available
+:: Check if Python is available
 python --version >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     ECHO [ERROR] Python is not installed or not added to PATH.
@@ -19,7 +19,7 @@ IF %ERRORLEVEL% NEQ 0 (
     EXIT /B
 )
 
-:: 2. Check for Virtual Environment
+::  Check for Virtual Environment
 IF NOT EXIST "venv" (
     ECHO [SETUP] Virtual environment 'venv' not found.
     ECHO [SETUP] Creating environment...
@@ -38,7 +38,7 @@ IF NOT EXIST "venv" (
     CALL venv\Scripts\activate.bat
 )
 
-:: 3. Launch the Application
+:: Launch the Application
 ECHO.
 ECHO [START] Launching Streamlit...
 ECHO [INFO]  Press Ctrl+C in this window to stop the server.
@@ -46,7 +46,7 @@ ECHO.
 
 streamlit run Traffic_RL.py
 
-:: 4. Pause if it crashes so you can read the error
+:: Pause if it crashes so you can read the error
 IF %ERRORLEVEL% NEQ 0 (
     ECHO.
     ECHO ========================================================

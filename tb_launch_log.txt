@@ -1,0 +1,22 @@
+C:\Users\vlasi\OneDrive\Desktop\DeepReinforcementLearningProject-master\traffic_rl_project\venv\Lib\site-packages\tensorboard\default.py:30: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+TensorFlow installation not found - running with reduced feature set.
+TensorBoard 2.20.0 at http://127.0.0.1:6006/ (Press CTRL+C to quit)
+W0128 21:59:18.882202 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp4_Mult2.0x_Eps1000_Seed0\\dqn_20260127-094605'
+W0128 21:59:18.884606 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp6_Mult2.0x_Eps3000_Seed0\\q_learning_20260127-131345'
+W0128 21:59:18.884702 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp8_Mult4.0x_Eps2000_Seed0\\dqn_20260127-140458'
+W0128 21:59:18.884738 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp8_Mult4.0x_Eps2000_Seed0\\q_learning_20260127-160002'
+W0128 21:59:18.884765 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp5_Mult2.0x_Eps2000_Seed0\\q_learning_20260127-112634'
+W0128 21:59:18.884790 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp6_Mult2.0x_Eps3000_Seed0\\dqn_20260127-113525'
+W0128 21:59:18.884813 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp2_Mult1.0x_Eps2000_Seed0\\q_learning_20260127-075112'
+W0128 21:59:18.884836 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp1_Mult1.0x_Eps1000_Seed0\\q_learning_20260127-064144'
+W0128 21:59:18.884857 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp1_Mult1.0x_Eps1000_Seed0\\dqn_20260127-060918'
+W0128 21:59:18.884876 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp4_Mult2.0x_Eps1000_Seed0\\q_learning_20260127-101653'
+W0128 21:59:18.884896 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp3_Mult1.0x_Eps3000_Seed0\\dqn_20260127-075918'
+W0128 21:59:18.884917 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp9_Mult4.0x_Eps3000_Seed0\\dqn_20260127-161455'
+W0128 21:59:18.884937 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp9_Mult4.0x_Eps3000_Seed0\\q_learning_20260127-180310'
+W0128 21:59:18.884956 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp3_Mult1.0x_Eps3000_Seed0\\q_learning_20260127-093449'
+W0128 21:59:18.884976 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp2_Mult1.0x_Eps2000_Seed0\\dqn_20260127-064635'
+W0128 21:59:18.884996 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp5_Mult2.0x_Eps2000_Seed0\\dqn_20260127-102113'
+W0128 21:59:18.885014 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp7_Mult4.0x_Eps1000_Seed0\\dqn_20260127-132647'
+W0128 21:59:18.885032 21600 plugin_event_multiplexer.py:267] Deleting accumulator 'experiments_gui_1769490558\\Exp7_Mult4.0x_Eps1000_Seed0\\q_learning_20260127-135843'
