@@ -28,7 +28,7 @@ def save_config(data, path="configs/temp_gui_config.yaml"):
     with open(path, "w") as f: yaml.dump(data, f)
     return path
 
-# --- HELPER: Aggressively Kill TensorBoard ---
+#  Aggressively Kill TensorBoard we had some isseus with running it.
 def kill_existing_tensorboard():
     """Kills any process named tensorboard.exe to free up Port 6006"""
     if os.name == 'nt':
@@ -45,7 +45,7 @@ def render_sidebar():
     
     st.sidebar.subheader("📈 Live Monitoring")
 
-    # 1. Sync Button
+    # Sync Button
     if st.sidebar.button("🔄 Sync CSV to TensorBoard"):
         if sync_csv_to_tensorboard:
             with st.spinner("Translating CSV logs..."):
@@ -54,7 +54,7 @@ def render_sidebar():
         else:
             st.sidebar.error("csv_to_tensorboard.py missing!")
 
-    # 2. TensorBoard Launcher
+    # TensorBoard Launcher
     col_tb1, col_tb2 = st.sidebar.columns(2)
 
     # We use a file to track if it's running because SessionState can be flaky with subprocesses
@@ -63,13 +63,13 @@ def render_sidebar():
     with col_tb1:
         if st.button("🚀 Launch TB"):
             try:
-                # A. CLEANUP: Kill any zombies first (The "Centralized" Fix)
+                # Kill any zombies first 
                 kill_existing_tensorboard()
                 time.sleep(0.5)
 
-                # B. PREPARE LOGS: Open a file to catch errors
+                # Open a file to catch errors
                 with open(log_file, "w") as out:
-                    # C. LAUNCH: Use sys.executable to ensure we use the venv python
+                    # C. Use sys.executable to ensure we use the venv python
                     cmd = [
                         sys.executable, "-m", "tensorboard.main", 
                         "--logdir", ".", 
@@ -94,7 +94,7 @@ def render_sidebar():
             st.session_state['tb_active'] = False
             st.rerun()
 
-    # 3. Status Check & Link
+    # Status Check & Link
     # Check the log file to see if it actually started
     is_running = st.session_state.get('tb_active', False)
     

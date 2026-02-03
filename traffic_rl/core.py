@@ -43,7 +43,7 @@ def train(env, agent, config, logger=None):
     rewards_history = []
     queue_history = []
     
-    # Track "Best" performance to save checkpoints
+    # Track performance to save checkpoints
     best_avg_reward = -float('inf')
     
     # Progress Bar
@@ -56,9 +56,8 @@ def train(env, agent, config, logger=None):
         
         eps = getattr(agent, 'epsilon', 0.0)
         
-        # 1. Log metrics
         if logger:
-            # Pass loss if available (DQN returns it in update, but we wrap it here mostly)
+            # Pass loss if available 
             # For strict loss logging, run_episode needs to return avg_loss. 
             # For now, we log None for loss to keep it simple.
             logger.log_step(episode, reward, metrics['avg_queue'], eps, loss=None)
@@ -70,7 +69,6 @@ def train(env, agent, config, logger=None):
             'q': f"{metrics['avg_queue']:.1f}"
         })
 
-        # 3. Save "Best" Model Logic
         # We use a moving average of last 10 episodes to determine stability
         if len(rewards_history) >= 10:
             avg_recent = np.mean(rewards_history[-10:])
@@ -83,7 +81,7 @@ def train(env, agent, config, logger=None):
                     save_name = "best_model.pt" if config.agent.name == "dqn" else "best_model.pkl"
                     agent.save(logger.get_save_path(save_name))
 
-    # 4. End of Training
+    # End of Training
     if logger:
         # Save plots
         logger.save_plot(rewards_history, queue_history)
