@@ -13,7 +13,7 @@ class TrafficLightEnv(gym.Env):
     
     metadata = {'render_modes': ['human', 'rgb_array'], 'render_fps': 4}
 
-    # MAPPING: Array Index -> Movement Name
+    # Array Index -> Movement Name
     MOVEMENT_INDICES = [
         'N_to_S', 'N_to_E', 'N_to_W',  # 0, 1, 2
         'S_to_N', 'S_to_W', 'S_to_E',  # 3, 4, 5
@@ -25,15 +25,15 @@ class TrafficLightEnv(gym.Env):
         super().__init__()
         self.config = config
         
-        # 1. Setup Base Arrival Rates (Before Rush Hour Logic)
+        # Setup Base Arrival Rates (Before Rush Hour Logic)
         self.base_arrival_rates = []
         for key in self.MOVEMENT_INDICES:
             base_rate = config.arrival_rates.get(key, 0.0)
-            # Apply the global multiplier (e.g., 1.3x) here once
+            # Apply the global multiplier 
             self.base_arrival_rates.append(base_rate * config.traffic_multiplier)
         self.base_arrival_rates = np.array(self.base_arrival_rates, dtype=np.float32)
 
-        # 2. Define Capacities (Cars per step) - Matches Old 'CapacityManager'
+        # Define Capacities (Cars per step) 
         # Indices: 0=Straight, 1=Left, 2=Right
         # Pattern repeats: [Straight, Left, Right] for N, S, E, W
         self.lane_capacities = np.array([
@@ -43,7 +43,7 @@ class TrafficLightEnv(gym.Env):
             2.0, 1.5, 1.0   # W
         ], dtype=np.float32)
 
-        # 3. Define Spaces
+        # Define Spaces
         self.observation_space = spaces.Box(
             low=0, 
             high=np.inf, 
@@ -52,7 +52,7 @@ class TrafficLightEnv(gym.Env):
         )
         self.action_space = spaces.Discrete(4)
         
-        # 4. Internal State
+        # Internal State
         self.queues = np.zeros(12, dtype=np.float32)
         self.current_phase = 0
         self.phase_duration = 0
@@ -74,22 +74,22 @@ class TrafficLightEnv(gym.Env):
     def step(self, action: int) -> Tuple[np.ndarray, float, bool, bool, Dict]:
         self.step_count += 1
         
-        # 1. Apply Action
+        # Apply Action
         prev_phase = self.current_phase
         self._apply_action(action)
         did_switch = (self.current_phase != prev_phase)
         
-        # 2. Simulate Traffic (Exact Physics Match)
+        # Simulate Traffic
         vehicles_passed = self._simulate_dynamics()
         
-        # 3. Calculate Reward
+        # Calculate Reward
         reward, r_components = self._calculate_reward(vehicles_passed, did_switch)
         
-        # 4. Check Termination
+        #  Check Termination
         truncated = self.step_count >= self.MAX_STEPS
         done = False
         
-        # 5. Observation
+        #  Observation
         obs = self._get_obs()
         
         info = {
@@ -107,10 +107,7 @@ class TrafficLightEnv(gym.Env):
             print(f"Step: {self.step_count} | Phase: {self.current_phase}")
             print(f"Queues: {self.queues.astype(int)}")
 
-    # =========================================================================
     # Helpers
-    # =========================================================================
-
     def _get_obs(self) -> np.ndarray:
         return np.concatenate([
             self.queues, 
@@ -139,7 +136,7 @@ class TrafficLightEnv(gym.Env):
         """
         Simulates vehicle arrivals and departures using exact logic from old code.
         """
-        # A. Time-Varying Traffic (Rush Hour)
+        # Time-Varying Traffic 
         cycle_pos = self.step_count % 1000
         time_factor = 1.0
         
@@ -150,7 +147,7 @@ class TrafficLightEnv(gym.Env):
             
         current_rates = self.base_arrival_rates * time_factor
 
-        # B. Poisson Arrivals (Matches old TrafficGenerator)
+        # Poisson Arrivals (Matches old TrafficGenerator)
         # Using Poisson allows >1 car per step if rate is high
         new_arrivals = self.np_random.poisson(current_rates).astype(np.float32)
         
@@ -159,7 +156,7 @@ class TrafficLightEnv(gym.Env):
             if self.queues[i] < self.MAX_QUEUE:
                 self.queues[i] += new_arrivals[i]
 
-        # C. Capacity-Based Departures (Matches old CapacityManager)
+        # Capacity-Based Departures
         total_passed = 0.0
         allowed_indices = self._get_allowed_indices(self.current_phase)
         
