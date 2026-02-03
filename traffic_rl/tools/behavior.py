@@ -30,7 +30,7 @@ def analyze_behavior(env, agent, episodes=3):
             for i in range(12):
                 lane_max_queues[i].append(queues[i])
 
-    # 1. Action Distribution Data
+    #  Action-Distribution Data
     total_actions = sum(action_counts.values())
     action_data = []
     for act, count in action_counts.items():
@@ -39,7 +39,7 @@ def analyze_behavior(env, agent, episodes=3):
     
     df_actions = pd.DataFrame(action_data)
 
-    # 2. Fairness Data (Max Queue observed per lane avg over time)
+    # Fairness Data
     fairness_data = []
     directions = ['N', 'N', 'N', 'S', 'S', 'S', 'E', 'E', 'E', 'W', 'W', 'W']
     types = ['S', 'L', 'R'] * 4
@@ -58,12 +58,12 @@ def analyze_behavior(env, agent, episodes=3):
 
 def plot_behavior(df_actions, df_fairness):
     """Generates figures for the GUI"""
-    # Plot 1: Actions
+    # Plot 1 Actions
     fig1, ax1 = plt.subplots(figsize=(6, 4))
     sns.barplot(data=df_actions, x="Action", y="Count", ax=ax1, palette="viridis")
     ax1.set_title("Action Distribution")
     
-    # Plot 2: Fairness
+    # Plot 2 Fairness
     fig2, ax2 = plt.subplots(figsize=(10, 4))
     sns.barplot(data=df_fairness, x="Label", y="Avg Queue", ax=ax2, palette="magma")
     ax2.set_title("Average Queue Length per Lane (Fairness Check)")

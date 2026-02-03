@@ -60,7 +60,7 @@ def evaluate_agent_scenarios(base_config, agent, episodes=3):
                 total_queue += info['total_queue']
                 total_throughput += info['throughput']
             
-            # Metric: Average Wait Time (Queue / Throughput)
+            # Metric Average Wait Time (Queue / Throughput)
             if total_throughput > 0:
                 wait = total_queue / total_throughput
             else:
@@ -74,7 +74,7 @@ def generate_plots(df, output_dir):
     try:
         sns.set_style("whitegrid")
         
-        # HEATMAP: Improvement over FixedTime
+        # HEATMAP Improvement over FixedTime
         heatmap_data = df.copy()
         
         # Create Label
@@ -141,7 +141,7 @@ def run_analysis_suite(target_folder, base_config):
     
     final_results = []
 
-    # 1. EVALUATE BASELINES
+    # EVALUATE BASELINES
     print("Evaluating Baselines...")
     for name, agent in [("FixedTime", FixedTimeAgent()), ("Adaptive", AdaptiveAgent())]:
         scores = evaluate_agent_scenarios(base_config, agent)
@@ -149,7 +149,7 @@ def run_analysis_suite(target_folder, base_config):
         row.update(scores)
         final_results.append(row)
 
-    # 2. EVALUATE TRAINED MODELS
+    # EVALUATE TRAINED MODELS
     subdirs = [f.path for f in os.scandir(target_folder) if f.is_dir()]
     # Natural sort
     subdirs.sort(key=lambda x: int(re.search(r'Exp(\d+)', x).group(1)) if re.search(r'Exp(\d+)', x) else 999)
@@ -188,7 +188,7 @@ def run_analysis_suite(target_folder, base_config):
                 final_results.append(row)
             except Exception as e: print(f"  Err Q: {e}")
 
-    # 3. REPORTING
+    # REPORTING
     if not final_results:
         print("No results found.")
         return

@@ -48,11 +48,11 @@ def _render_frame(state, phase, step):
             ha='center', va='center', fontweight='bold', color=color, 
             bbox=dict(facecolor='black', alpha=0.1))
 
-    # --- FIX FOR MATPLOTLIB ERROR ---
+
     fig.canvas.draw()
     # Get RGBA buffer and convert to numpy
     image = np.asarray(fig.canvas.buffer_rgba())
-    # Convert RGBA to RGB (drop alpha channel)
+    # Convert RGBA to RGB 
     if image.shape[2] == 4:
         image = image[:, :, :3]
         

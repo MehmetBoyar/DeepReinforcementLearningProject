@@ -59,9 +59,7 @@ def run_batch_experiments(base_config, output_folder, multipliers=[1.0], episode
         run_seed = current_config.train.seed + exp['seed_offset']
         set_seed(run_seed)
 
-        # ---------------------------------------------------------
-        # 1. RUN DQN AGENT
-        # ---------------------------------------------------------
+        # DQN AGENT
         if run_dqn:
             try:
                 current_config.agent.name = "dqn"
@@ -82,9 +80,7 @@ def run_batch_experiments(base_config, output_folder, multipliers=[1.0], episode
                 print(f"  !!! DQN Failed: {e}")
                 traceback.print_exc()
 
-        # ---------------------------------------------------------
-        # 2. RUN Q-LEARNING AGENT
-        # ---------------------------------------------------------
+        # Q-LEARNING AGENT
         if run_q_learning:
             try:
                 current_config.agent.name = "q_learning"

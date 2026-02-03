@@ -28,8 +28,6 @@ def run_hyperparameter_optimization(base_config_path, n_trials, search_space):
         raise FileNotFoundError(f"Config not found at {base_config_path}")
 
     def objective(trial):
-        # --- 1. Construct Hyperparameters ---
-        
         # Start with defaults from config
         params = {
             'lr': base_app_config.agent.lr,
@@ -37,7 +35,8 @@ def run_hyperparameter_optimization(base_config_path, n_trials, search_space):
             'batch_size': base_app_config.agent.batch_size,
             'hidden_dim': base_app_config.agent.hidden_dim,
             'epsilon_decay': base_app_config.agent.epsilon_decay,
-            'target_update': 100 # Default if not in config
+            'target_update': 100, # Default   
+            'buffer_size': getattr(base_app_config.agent, 'buffer_size', 50000) 
         }
 
         # Override if enabled in search_space
@@ -65,7 +64,11 @@ def run_hyperparameter_optimization(base_config_path, n_trials, search_space):
             s = search_space['target_update']
             params['target_update'] = trial.suggest_categorical("target_update", s['choices'])
 
-        # --- 2. Setup Config (Stress Test: 1.3x Traffic) ---
+        if search_space.get('buffer_size', {}).get('enabled'):
+            s = search_space['buffer_size']
+            params['buffer_size'] = trial.suggest_categorical("buffer_size", s['choices'])
+
+        #  Setup Config (Stress Test: 1.3x Traffic) 
         env_conf = EnvConfig(
             arrival_rates=base_app_config.env.arrival_rates,
             traffic_multiplier=1.3, 
@@ -81,7 +84,7 @@ def run_hyperparameter_optimization(base_config_path, n_trials, search_space):
             batch_size=params['batch_size'], 
             gamma=params['gamma'], 
             hidden_dim=params['hidden_dim'],
-            buffer_size=50000,
+            buffer_size=params['buffer_size'], 
             epsilon_start=1.0, 
             epsilon_min=0.01, 
             epsilon_decay=params['epsilon_decay'],
@@ -91,7 +94,7 @@ def run_hyperparameter_optimization(base_config_path, n_trials, search_space):
             dueling_dqn=base_app_config.agent.dueling_dqn
         )
         
-        # --- 3. Run Training ---
+        #  Run Training 
         env = TrafficLightEnv(config=env_conf)
         
         # CPU Fallback
@@ -100,7 +103,7 @@ def run_hyperparameter_optimization(base_config_path, n_trials, search_space):
             train_conf.device = "cpu"
 
         agent = DQNAgent(14, 4, agent_conf, device=device)
-        # Manually set target update since it's not in standard init
+        # set target update
         agent.target_update_freq = params['target_update']
         
         rewards = []
@@ -133,14 +136,27 @@ def run_hyperparameter_optimization(base_config_path, n_trials, search_space):
                     raise optuna.TrialPruned()
 
         pbar.close()
-        # Objective: Maximize Reward of last 20 episodes
+        # Maximize Reward of last 20 episodes
         return np.mean(rewards[-20:])
 
-    # --- Run Optuna ---
+
     optuna.logging.set_verbosity(optuna.logging.WARNING)
     study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=42))
     
     study.optimize(objective, n_trials=n_trials)
+    
+    print("\n" + "="*60)
+    print("OPTIMIZATION COMPLETE")
+    print("="*60)
+    print("Best Params found:")
+    for k, v in study.best_params.items():
+        print(f"  {k}: {v}")
+        
+    # Save best params
+    output_path = "configs/best_params_found.yaml"
+    with open(output_path, "w") as f:
+        yaml.dump(study.best_params, f)
+    print(f"\nSaved best parameters to: {output_path}")
     
     print("\n" + "="*60)
     print("OPTIMIZATION COMPLETE")
