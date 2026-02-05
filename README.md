@@ -163,7 +163,6 @@ Then run:
 Every experiment run generates:
 - `metrics.csv`: Raw training data.
 - `model.pt` / `model.pkl`: Final model weights.
-- `best_model.pt`: Checkpoint with the highest evaluation reward.
 - `config.json`: The specific config used for that run.
 - `training_plot.png`: Static summary plot.
 
@@ -176,3 +175,4 @@ Contributions are welcome! Please submit a Pull Request.
 ## 📄 License
 
 This project is licensed under the MIT License.
+
