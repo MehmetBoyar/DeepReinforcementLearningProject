@@ -133,7 +133,7 @@ Use the notebook for granular analysis, specific model loading, and generating p
 You can control the environment and agent hyperparameters via YAML:
 
     environment:
-      traffic_multiplier: 1.0  # 1.0 = Normal, 2.0 = Heavy
+      traffic_multiplier: 1.0  # 1.0 = Normal, 2.0 = Moderate Traffic
       max_steps: 1000          # Duration of one episode
 
     agent:
@@ -175,4 +175,5 @@ Contributions are welcome! Please submit a Pull Request.
 ## 📄 License
 
 This project is licensed under the MIT License.
+
 
